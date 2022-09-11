@@ -1,9 +1,11 @@
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  User
+  User,
 } from "firebase/auth";
+import { onSnapshot } from "firebase/firestore";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { booksCollection } from "./firebase/books/books.collection";
 import * as booksService from "./firebase/books/books.service";
 import { firebaseAuth } from "./firebase/config";
 
@@ -76,6 +78,12 @@ export const App = () => {
 
     console.log("created book: ", book);
   }, [bookName, bookPagesAmount]);
+
+  useEffect(() => {
+    onSnapshot(booksCollection, (snapshot) => {
+      console.log(snapshot.docs.map((doc) => doc.data()));
+    });
+  }, []);
 
   return (
     <>
